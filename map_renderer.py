@@ -84,17 +84,22 @@ def build_prediction_map(pred_df: pd.DataFrame,
         gradient = gradients.get(mineral, {0.2: "#aaa", 0.5: color, 1.0: "#000"})
         sub      = pred_df[pred_df["predicted_mineral"] == mineral]
         prob_col = f"prob_{mineral}"
-        heat_data = pred_df[["latitude", "longitude", prob_col]].values.tolist()
-        HeatMap(
-            heat_data,
-            name=f"{mineral} heatmap",
-            min_opacity=0.25,
-            max_val=100,
-            radius=22,
-            blur=16,
-            gradient=gradient,
-            show=True,
-        ).add_to(m)
+        
+       # Only use points where this mineral has meaningful probability
+        heat_sub  = pred_df[pred_df[prob_col] >= 20][["latitude","longitude", prob_col]]
+        heat_data = heat_sub.values.tolist()
+        if heat_data:
+            HeatMap(
+                heat_data,
+                name=f"{mineral} heatmap",
+                min_opacity=0.3,
+                max_val=float(pred_df[prob_col].max()),
+                radius=18,
+                blur=20,
+                gradient=gradient,
+                show=True,
+            ).add_to(m)
+        
         top = sub.nlargest(8, prob_col)
         fg  = folium.FeatureGroup(name=f"{mineral} markers", show=False)
         for _, row in top.iterrows():
