@@ -1,7 +1,3 @@
-"""
-map_renderer.py
-"""
-
 import folium
 from folium.plugins import HeatMap, MarkerCluster
 import pandas as pd
@@ -82,11 +78,8 @@ def build_prediction_map(pred_df: pd.DataFrame,
     for mineral in minerals:
         color    = MINERAL_COLORS.get(mineral, "#888")
         gradient = gradients.get(mineral, {0.2: "#aaa", 0.5: color, 1.0: "#000"})
-        sub      = pred_df[pred_df["predicted_mineral"] == mineral]
         prob_col = f"prob_{mineral}"
-        
-       # Only use points where this mineral has meaningful probability
-       heat_sub = pred_df[pred_df[prob_col] >= 50][["latitude","longitude", prob_col]]
+        heat_sub  = pred_df[pred_df[prob_col] >= 50][["latitude", "longitude", prob_col]]
         heat_data = heat_sub.values.tolist()
         if heat_data:
             HeatMap(
@@ -99,7 +92,7 @@ def build_prediction_map(pred_df: pd.DataFrame,
                 gradient=gradient,
                 show=True,
             ).add_to(m)
-        
+        sub = pred_df[pred_df["predicted_mineral"] == mineral]
         top = sub.nlargest(8, prob_col)
         fg  = folium.FeatureGroup(name=f"{mineral} markers", show=False)
         for _, row in top.iterrows():
