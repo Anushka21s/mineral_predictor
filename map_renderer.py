@@ -86,7 +86,7 @@ def build_prediction_map(pred_df: pd.DataFrame,
         prob_col = f"prob_{mineral}"
         
        # Only use points where this mineral has meaningful probability
-        heat_sub  = pred_df[pred_df[prob_col] >= 20][["latitude","longitude", prob_col]]
+       heat_sub = pred_df[pred_df[prob_col] >= 50][["latitude","longitude", prob_col]]
         heat_data = heat_sub.values.tolist()
         if heat_data:
             HeatMap(
