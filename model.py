@@ -115,10 +115,10 @@ def train_models(n_samples: int = 1200, test_size: float = 0.2):
 
     return df, rf_pipeline, xgb_pipeline, metrics, feature_names, le
 
-
 def predict_map(rf_pipeline, le, feature_names,
-                grid_lat_steps: int = 35,
-                grid_lon_steps: int = 35):
+                grid_lat_steps: int = 20,
+                grid_lon_steps: int = 20):
+
     """
     Predict the most-likely mineral and its probability for a grid of
     points covering India, returning a GeoDataFrame-friendly DataFrame.
