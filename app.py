@@ -1,6 +1,4 @@
-Bash
 
-cat > /home/claude/mineral_predictor/app.py << 'ENDOFFILE'
 """
 app.py  –  Geospatial Mineral Prediction Dashboard  v4
 -------------------------------------------------------
